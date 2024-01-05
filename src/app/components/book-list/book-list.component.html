@@ -2,7 +2,7 @@
 <hr>
 <div *ngFor="let book of books" class="book-item">
   <span
-    >{{ book.title }} by {{ book.author }} </span
+    >{{ book.title }} by {{ authors[book.author_id] }} </span
   >
   <div class="buttons-container">
     <button class="update-btn" (click)="updateBook(book)">Update</button>

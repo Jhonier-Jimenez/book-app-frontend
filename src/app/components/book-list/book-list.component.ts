@@ -3,6 +3,7 @@ import { Book } from '../../models/book.model';
 import { BooksService } from '../../services/books.service';
 import { CommonModule } from '@angular/common';
 import { BookFormComponent } from '../book-form/book-form.component';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-book-list',
@@ -16,11 +17,13 @@ export class BookListComponent implements OnInit {
   isOpenForm = false;
   isEditMode = false;
   bookToUpdate!: Book;
+  authors:any = {};
 
   constructor(private bookService: BooksService) {}
 
   ngOnInit(): void {
     this.loadBooks();
+    this.loadAuthors();
   }
 
   addBook(): void {
@@ -36,7 +39,6 @@ export class BookListComponent implements OnInit {
 
   deleteBook(id: string): void {
     this.deleteBookFromDB(id);
-    this.updateScreen();
   }
 
   updateScreen() {
@@ -46,6 +48,21 @@ export class BookListComponent implements OnInit {
 
   cancel() {
     this.isOpenForm = false;
+  }
+
+
+
+  loadAuthors(): void {
+    this.bookService.getAuthors().subscribe(
+      (authors) => {
+        authors.forEach(author => {
+          this.authors[author.id] = author.name;
+        });;
+      },
+      (error) => {
+        console.error('Error loading authors:', error);
+      }
+    ); 
   }
 
   loadBooks(): void {
@@ -63,13 +80,7 @@ export class BookListComponent implements OnInit {
 
   deleteBookFromDB(id: string): void {
     
-    this.bookService.deleteBook(id).subscribe(
-      () => {
-        this.books = this.books.filter((book) => book.id !== id);
-      },
-      (error) => {
-        console.error('Error deleting book:', error);
-      }
-    );
+    this.bookService.deleteBook(id).pipe(finalize(()=>this.updateScreen())).subscribe();
+    
   } 
 }

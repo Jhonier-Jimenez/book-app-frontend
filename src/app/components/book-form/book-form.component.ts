@@ -45,12 +45,12 @@ export class BookFormComponent implements OnInit{
 
       if (this.isEditMode) {
         newBook = {id: this.bookEditing.id, ...this.bookForm.value}
-        newBook = this.updateBook(newBook);
+        this.updateBook(newBook);
       } else {
         this.createBook(newBook);
       }
 
-      this.addBook.emit(newBook);
+      // this.addBook.emit(newBook);
       this.bookForm.reset();
     }
   }
@@ -72,7 +72,7 @@ export class BookFormComponent implements OnInit{
     
     this.bookService.addBook(newBook).subscribe(
       (addedBook) => {
-        this.books.push(addedBook);
+        this.addBook.emit(addedBook);
       },
       (error) => {
         console.error('Error adding book:', error);
@@ -84,7 +84,7 @@ export class BookFormComponent implements OnInit{
      
     this.bookService.updateBook(updatedBook).subscribe(
       () => {
-        
+        this.addBook.emit(updatedBook);
       },
       (error) => {
         console.error('Error updating book:', error);
