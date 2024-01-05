@@ -1,0 +1,22 @@
+<h2>{{ isEditMode ? 'Update Book' : 'Create Book' }}</h2>
+<form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="title">Title:</label>
+      <input type="text" id="title" formControlName="title" />
+    </div>
+    <div>
+      <label for="author">Author:</label>
+      <select id="author" formControlName="author">
+        <option *ngFor="let author of authors" [value]="author.name">{{ author.name }}</option>
+      </select>
+    </div>
+    <div>
+        <label for="read">Read:</label>
+        <input type="checkbox" id="read" formControlName="read" />
+      </div>
+    <div>
+      <button type="submit" [disabled]="!bookForm.valid">{{isEditMode ? 'Update Book': 'Create Book'}}</button>
+      <button type="button" (click)="cancelEvent.emit()">Cancel</button>
+    </div>
+</form>
+  

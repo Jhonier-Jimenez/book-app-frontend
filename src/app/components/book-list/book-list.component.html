@@ -1,0 +1,16 @@
+<h1>Books</h1>
+<hr>
+<div *ngFor="let book of books" class="book-item">
+  <span
+    >{{ book.title }} by {{ book.author }} </span
+  >
+  <div class="buttons-container">
+    <button class="update-btn" (click)="updateBook(book)">Update</button>
+    <button class="delete-btn" (click)="deleteBook(book.id)">Delete</button>
+  </div>
+
+
+</div>
+<button (click)="addBook()">Add new book</button>
+<app-book-form *ngIf="isOpenForm" [isEditMode]="isEditMode" [bookEditing]="bookToUpdate" (addBook)="updateScreen()" (cancelEvent)="cancel()"></app-book-form>
+
